@@ -27,8 +27,9 @@ resource "aws_instance" "app_server" {
       redis_endpoint = var.redis_endpoint
 
       #run_migrations = count.index == 0 ? "true" : "false"
-    }),
-  }))
+    })
+  })
+  )
 
   tags = {
     Name = "ralph_app_az${count.index + 1}"
