@@ -19,17 +19,17 @@ resource "aws_instance" "app_server" {
   key_name = "shafee-jenkins-keypair"
   subnet_id = var.private_subnet[count.index % length(var.private_subnet)]
   
-  user_data = base64encode(file("${path.module}/deploy.sh", {
-    rds_endpoint = var.rds_endpoint,
+user_data = base64encode(
+  templatefile("${path.module}/deploy.sh", {
+    rds_endpoint   = var.rds_endpoint,
     redis_endpoint = var.redis_endpoint,
     docker_compose = templatefile("${path.root}/../docker/docker-compose.yml", {
-      rds_endpoint = var.rds_endpoint,
+      rds_endpoint   = var.rds_endpoint,
       redis_endpoint = var.redis_endpoint
-
-      #run_migrations = count.index == 0 ? "true" : "false"
     })
   })
-  )
+)
+
 
   tags = {
     Name = "ralph_app_az${count.index + 1}"
