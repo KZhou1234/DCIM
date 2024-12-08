@@ -3,7 +3,7 @@ output "rds_address" {
 }
 
 output "rds_endpoint"{
-  value = aws_db_instance.postgres_db.endpoint
+  value = aws_db_instance.mysql_db.endpoint
 }
 
 output "redis_endpoint" {
