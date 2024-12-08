@@ -25,14 +25,14 @@ module "EC2"{
   db_password = var.db_password
   rds_address = module.RDS.rds_address
   rds_endpoint = module.RDS.rds_endpoint
-  postgres_db = module.RDS.postgres_db
+  redis_endpoint = module.RDS.redis_endpoint
+  mysql_db = module.RDS.mysql_db
   rds_sg_id = module.RDS.rds_sg_id
   alb_sg_id = module.ALB.alb_sg_id
   app_port = var.app_port
   dockerhub_user = var.dockerhub_user
   dockerhub_pass = var.dockerhub_pass
   nat_gw = module.VPC.nat_gw
-
 }
 
 module "RDS"{
