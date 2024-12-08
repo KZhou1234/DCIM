@@ -57,3 +57,6 @@ variable "dockerhub_pass"{
 
 variable "nat_gw"{
 }
+variable "alb_dns_name" {
+  
+}

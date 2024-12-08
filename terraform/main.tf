@@ -33,6 +33,8 @@ module "EC2"{
   dockerhub_user = var.dockerhub_user
   dockerhub_pass = var.dockerhub_pass
   nat_gw = module.VPC.nat_gw
+  alb_dns_name = module.EC2.alb_dns_name
+
 }
 
 module "RDS"{
