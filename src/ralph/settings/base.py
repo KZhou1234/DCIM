@@ -175,7 +175,7 @@ DATABASES = {
         'NAME': os.environ.get('DATABASE_NAME', 'ralph_ng'),
         'USER': os.environ.get('DATABASE_USER', 'ralph_ng'),
         'PASSWORD': os.environ.get('DATABASE_PASSWORD', 'ralph_ng') or None,
-        'HOST': os.environ.get('DATABASE_HOST', '127.0.0.1'),
+        'HOST': os.environ.get('DB_HOST', '').split(':')[0],  # RDS endpoint hostname
         'PORT': os.environ.get('DATABASE_PORT', 3306),
         'OPTIONS': DATABASE_OPTIONS,
         'ATOMIC_REQUESTS': True,
@@ -326,61 +326,35 @@ if API_THROTTLING:
         }
     })
 
-REDIS_PASSWORD = os.environ.get('REDIS_PASSWORD', 'ralph_ng')
-REDIS_SENTINEL_ENABLED = bool_from_env('REDIS_SENTINEL_ENABLED', False)
+import os
+
+# Redis Configuration
+REDIS_HOST = os.environ.get('REDIS_HOST', 'localhost')  # Primary endpoint of the replication group
+REDIS_PORT = int(os.environ.get('REDIS_PORT', 6379))    # Default Redis port
+REDIS_DB = int(os.environ.get('REDIS_DB', 0))           # Default Redis DB index
+#REDIS_PASSWORD = os.environ.get('REDIS_PASSWORD', None)  # Optional for ElastiCache, only needed if encryption/auth is enabled
+
 REDIS_SOCKET_TIMEOUT = float(os.environ.get('REDIS_SOCKET_TIMEOUT', 1.0))
 REDIS_CONNECT_TIMEOUT = float(os.environ.get('REDIS_CONNECT_TIMEOUT', 1.0))
 REDIS_COMMAND_TIMEOUT = float(os.environ.get('REDIS_COMMAND_TIMEOUT', 10.0))
 
-if REDIS_SENTINEL_ENABLED:
-    from redis.sentinel import Sentinel
+# Redis connection configuration for ElastiCache replication group
+REDIS_CONNECTION = {
+    'HOST': REDIS_HOST,
+    'PORT': REDIS_PORT,
+    'DB': REDIS_DB,
+    #'PASSWORD': REDIS_PASSWORD,  # Leave blank if ElastiCache does not use a password
+    'TIMEOUT': REDIS_COMMAND_TIMEOUT,
+    'CONNECT_TIMEOUT': REDIS_CONNECT_TIMEOUT,
+}
 
-    REDIS_SENTINEL_HOSTS = get_sentinels(os.environ.get('REDIS_SENTINEL_HOSTS', None))  # noqa
-    REDIS_CLUSTER_NAME = os.environ.get('REDIS_CLUSTER_NAME', 'ralph_ng')
-    REDIS_SENTINEL_SOCKET_TIMEOUT = float(os.environ.get('REDIS_SENTINEL_SOCKET_TIMEOUT', 1.0))  # noqa
-
-    sentinel = Sentinel(
-        REDIS_SENTINEL_HOSTS,
-        socket_timeout=REDIS_SENTINEL_SOCKET_TIMEOUT,
-        password=REDIS_PASSWORD
+# RQ Queue Configuration
+RQ_QUEUES = {
+    'default': dict(
+        **REDIS_CONNECTION
     )
-    REDIS_MASTER = sentinel.master_for(REDIS_CLUSTER_NAME)
+}
 
-    REDIS_CONNECTION = {
-        'SENTINELS': REDIS_SENTINEL_HOSTS,
-        'DB': int(os.environ.get('REDIS_DB', 0)),
-        'PASSWORD': REDIS_PASSWORD,
-        'TIMEOUT': REDIS_COMMAND_TIMEOUT,
-        'CONNECT_TIMEOUT': REDIS_CONNECT_TIMEOUT,
-    }
-    RQ_QUEUES = {
-        'default': {
-            'SENTINELS': REDIS_SENTINEL_HOSTS,
-            'MASTER_NAME': REDIS_CLUSTER_NAME,
-            'DB': int(os.environ.get('REDIS_DB', 0)),
-            'PASSWORD': REDIS_PASSWORD,
-            'CONNECTION_KWARGS': {
-                'socket_connect_timeout': REDIS_CONNECT_TIMEOUT,
-                'retry_on_timeout': True
-            },
-        },
-    }
-else:
-    REDIS_MASTER_IP = None
-    REDIS_MASTER_PORT = None
-    REDIS_CONNECTION = {
-            'HOST': REDIS_MASTER_IP or os.environ.get('REDIS_HOST', 'localhost'),  # noqa
-            'PORT': REDIS_MASTER_PORT or os.environ.get('REDIS_PORT', '6379'),
-            'DB': int(os.environ.get('REDIS_DB', 0)),
-            'PASSWORD': os.environ.get('REDIS_PASSWORD', ''),
-            'TIMEOUT': REDIS_COMMAND_TIMEOUT,
-            'CONNECT_TIMEOUT': REDIS_CONNECT_TIMEOUT,
-        }
-    RQ_QUEUES = {
-        'default': dict(
-            **REDIS_CONNECTION
-        )
-    }
 
 # set to False to turn off cache decorator
 USE_CACHE = bool_from_env('USE_CACHE', True)
