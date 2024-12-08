@@ -35,7 +35,7 @@ resource "aws_instance" "app_server" {
   }
 
   depends_on = [
-    var.postgres_db,
+    var.mysql_db,
     var.nat_gw
   ]
 }
@@ -59,7 +59,7 @@ resource "aws_instance" "bastion_host" {
    }
 
    depends_on = [
-    var.postgres_db,
+    var.mysql_db,
     var.nat_gw
   ]
 }
