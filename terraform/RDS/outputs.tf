@@ -21,6 +21,6 @@ output "rds_sg_id" {
     value = aws_security_group.rds_sg.id
 }
 
-output "msql_db"{
+output "mysql_db"{
   value = aws_db_instance.mysql_db.id
 }
