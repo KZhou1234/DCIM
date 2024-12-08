@@ -2,6 +2,10 @@ output "rds_address" {
   value = aws_db_instance.mysql_db.address
 }
 
+output "rds_endpoint"{
+  value = aws_db_instance.postgres_db.endpoint
+}
+
 output "redis_endpoint" {
   description = "Primary endpoint of the Redis Replication Group"
   value       = aws_elasticache_replication_group.redis.primary_endpoint_address
