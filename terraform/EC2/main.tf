@@ -23,7 +23,6 @@ user_data = base64encode(
   templatefile("${path.module}/deploy.sh", {
     rds_endpoint   = var.rds_endpoint,
     redis_endpoint = var.redis_endpoint,
-    # ALB_DNS = aws_lb.app_alb.dns_name
     docker_compose = templatefile("${path.root}/../docker/docker-compose.yml", {
       rds_endpoint   = var.rds_endpoint,
       redis_endpoint = var.redis_endpoint

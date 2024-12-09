@@ -75,4 +75,3 @@ echo "System setup completed successfully"
 
 echo "Setting up Ralph configuration..."
 mkdir -p /etc/ralph/conf.d
-# echo "ALLOWED_HOSTS=${aws_lb.app_alb.dns_name},localhost,127.0.0.1" >> /etc/ralph/conf.d/settings.conf
