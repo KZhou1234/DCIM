@@ -34,7 +34,7 @@ module "EC2"{
   dockerhub_pass = var.dockerhub_pass
   nat_gw = module.VPC.nat_gw
   # alb_dns_name = module.EC2.alb_dns_name
-  
+
 
 }
 
@@ -74,8 +74,8 @@ output "private_instance_ips" {
     description = "Private IPs of all application instances"
 }
 
-output "alb_dns_name" {
-    value       = module.ALB.alb_dns_name
-    description = "DNS name of the Application Load Balancer"
-    sensitive   = false
-}
+# output "alb_dns_name" {
+#     value       = module.ALB.alb_dns_name
+#     description = "DNS name of the Application Load Balancer"
+#     sensitive   = false
+# }
