@@ -17,20 +17,20 @@ services:
         DATABASE_NAME: ralph_ng
         DATABASE_USER: ralph_ng
         DATABASE_PASSWORD: ralph_ng
-        DATABASE_HOST: ${rds_endpoint}
+        DB_HOST: ${rds_endpoint}
         REDIS_HOST: ${redis_endpoint}
         REDIS_PASSWORD: ""
         REDIS_PORT: 6379
         REDIS_DB: 0
 #using load balancer instead of nginx
-  # nginx:
-  #   platform: linux/amd64
-  #   image: allegro/ralph-static-nginx:latest
-  #   restart: always
-  #   ports:
-  #     - "80:80"
-  #   volumes:
-  #     - ralph_media:/opt/media
+  nginx:
+    platform: linux/amd64
+    image: allegro/ralph-static-nginx:latest
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ralph_media:/opt/media
 
   # db:
   #   platform: linux/amd64
