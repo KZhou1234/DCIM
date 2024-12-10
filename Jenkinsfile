@@ -130,7 +130,7 @@ pipeline {
                                         
                                         docker compose -f /home/ubuntu/docker-compose.yml exec -T web ralphctl migrate
                                         
-                                        echo "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser('\\"$SUPERUSER_NAME\\"', '\\"team@cloudega.com\\"', '\\"$SUPERUSER_PASSWORD\\"') if not User.objects.filter(username='\\"$SUPERUSER_NAME\\"').exists() else None" | docker compose -f /home/ubuntu/docker-compose.yml exec -T web python manage.py shell
+                                        echo "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser('\\"$SUPERUSER_NAME\\"', '\\"team@cloudega.com\\"', '\\"$SUPERUSER_PASSWORD\\"') if not User.objects.filter(username='\\"$SUPERUSER_NAME\\"').exists() else None" | docker compose -f /home/ubuntu/docker-compose.yml exec -T web python ralphctl shell
                                         
                                         docker compose -f /home/ubuntu/docker-compose.yml exec -T web ralphctl demodata
                                         
