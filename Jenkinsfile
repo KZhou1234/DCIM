@@ -124,17 +124,17 @@ pipeline {
                                         git clone https://github.com/allegro/ralph.git
                                         cd ralph/docker
                                         
-                                        docker compose up -d
+                                        docker compose -f /home/ubuntu/docker-compose.yml up -d
                                         
                                         sleep 30
                                         
-                                        docker compose exec -T web ralphctl migrate
+                                        docker compose -f /home/ubuntu/docker-compose.yml exec -T web ralphctl migrate
                                         
-                                        echo "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser('\\"$SUPERUSER_NAME\\"', '\\"team@cloudega.com\\"', '\\"$SUPERUSER_PASSWORD\\"') if not User.objects.filter(username='\\"$SUPERUSER_NAME\\"').exists() else None" | docker compose exec -T web python manage.py shell
+                                        echo "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser('\\"$SUPERUSER_NAME\\"', '\\"team@cloudega.com\\"', '\\"$SUPERUSER_PASSWORD\\"') if not User.objects.filter(username='\\"$SUPERUSER_NAME\\"').exists() else None" | docker compose -f /home/ubuntu/docker-compose.yml exec -T web python manage.py shell
                                         
-                                        docker compose exec -T web ralphctl demodata
+                                        docker compose -f /home/ubuntu/docker-compose.yml exec -T web ralphctl demodata
                                         
-                                        docker compose exec -T web ralphctl sitetree_resync_apps
+                                        docker compose -f /home/ubuntu/docker-compose.yml exec -T web ralphctl sitetree_resync_apps
                                     '
                                 """
                                 echo "🌟 Ralph is now ready to rock on ${ip}!"
@@ -144,9 +144,9 @@ pipeline {
                                     ssh ${sshOptions} ubuntu@${ip} '
                                         cd /home/ubuntu/ralph/docker
                                         git pull
-                                        docker compose pull
-                                        docker compose up -d
-                                        docker compose exec -T web ralphctl migrate
+                                        docker compose -f /home/ubuntu/docker-compose.yml pull
+                                        docker compose -f /home/ubuntu/docker-compose.yml up -d
+                                        docker compose -f /home/ubuntu/docker-compose.yml exec -T web ralphctl migrate
                                     '
                                 """
                             }

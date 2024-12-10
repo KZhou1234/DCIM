@@ -75,3 +75,6 @@ echo "System setup completed successfully"
 
 echo "Setting up Ralph configuration..."
 mkdir -p /etc/ralph/conf.d
+
+echo "${docker_compose}" > /home/ubuntu/docker-compose.yml
+
