@@ -175,7 +175,7 @@ DATABASES = {
         'NAME': os.environ.get('DATABASE_NAME', 'ralph_ng'),
         'USER': os.environ.get('DATABASE_USER', 'ralph_ng'),
         'PASSWORD': os.environ.get('DATABASE_PASSWORD', 'ralph_ng') or None,
-        'HOST': os.environ.get('DB_HOST', '').split(':')[0],  # RDS endpoint hostname
+        'HOST': os.environ.get('DATABASE_HOST', '').split(':')[0],  # RDS endpoint hostname
         'PORT': os.environ.get('DATABASE_PORT', 3306),
         'OPTIONS': DATABASE_OPTIONS,
         'ATOMIC_REQUESTS': True,
