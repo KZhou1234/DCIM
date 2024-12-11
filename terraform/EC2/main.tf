@@ -21,10 +21,10 @@ resource "aws_instance" "app_server" {
   
 user_data = base64encode(
   templatefile("${path.module}/deploy.sh", {
-    rds_endpoint   = var.rds_endpoint,
+    rds_endpoint   = split(":", var.rds_endpoint)[0],
     redis_endpoint = var.redis_endpoint,
     docker_compose = templatefile("${path.root}/../docker/docker-compose.yml", {
-      rds_endpoint   = var.rds_endpoint,
+      rds_endpoint   = split(":", var.rds_endpoint)[0],
       redis_endpoint = var.redis_endpoint
     })
   })
