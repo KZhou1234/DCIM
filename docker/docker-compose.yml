@@ -27,11 +27,6 @@ services:
       - "80:80"
     volumes:
       - ralph_media:/opt/media
-  node_exporter:
-    image: prom/node-exporter:v1.6.0
-    container_name: node_exporter
-    ports:
-      - "9200:9200"
 
 
   cadvisor:
