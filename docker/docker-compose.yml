@@ -1,28 +1,23 @@
-version: '3'
 services:
   web:
     platform: linux/amd64
-    image: kezhou932/ralph:dev
+    image: allegro/ralph:latest
     restart: always
-    ports:
-      - "8000"
+    port:
+      - "8000:8000"
     volumes:
       - ralph_media:/var/local/ralph/media
       - ralph_static:/usr/share/ralph/static
-    links:
-      # - db
-      # - redis
-      - nginx
     environment:
         DATABASE_NAME: ralph_ng
         DATABASE_USER: ralph_ng
         DATABASE_PASSWORD: ralph_ng
-        DB_HOST: ${rds_endpoint}
+        DATABASE: ${rds_endpoint}
         REDIS_HOST: ${redis_endpoint}
         REDIS_PASSWORD: ""
         REDIS_PORT: 6379
         REDIS_DB: 0
-#using load balancer instead of nginx
+
   nginx:
     platform: linux/amd64
     image: allegro/ralph-static-nginx:latest
