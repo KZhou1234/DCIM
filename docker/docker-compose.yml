@@ -3,15 +3,15 @@ services:
     platform: linux/amd64
     image: allegro/ralph:latest
     restart: always
-    port:
+    ports:
       - "8000:8000"
     volumes:
       - ralph_media:/var/local/ralph/media
       - ralph_static:/usr/share/ralph/static
     environment:
         DATABASE_NAME: ralph_ng
-        DATABASE_USER: ralph_ng
-        DATABASE_PASSWORD: ralph_ng
+        DATABASE_USER: "cloudega2024"
+        DATABASE_PASSWORD: "cloudega2024!"
         DATABASE: ${rds_endpoint}
         REDIS_HOST: ${redis_endpoint}
         REDIS_PASSWORD: ""
