@@ -12,8 +12,8 @@ services:
         DATABASE_NAME: ralph_ng
         DATABASE_USER: "cloudega2024"
         DATABASE_PASSWORD: "cloudega2024!"
-        DATABASE_PORT: 3306
         DATABASE_HOST: ${rds_endpoint}
+        DATABASE_PORT: 3306
         REDIS_HOST: ${redis_endpoint}
         REDIS_PASSWORD: ""
         REDIS_PORT: 6379
