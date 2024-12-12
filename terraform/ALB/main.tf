@@ -121,7 +121,7 @@ resource "aws_lb_listener" "app_http_listener" {
 }
 
 resource "aws_lb_listener" "cAdvisor_http_listener" {
-  load_balancer_arn = aws_lb.cAdvisor_tg.arn
+  load_balancer_arn = aws_lb.app_alb.arn
   port              = 8080
   protocol          = "HTTP"
 
@@ -161,7 +161,7 @@ resource "aws_lb_target_group_attachment" "nodex_tg_attachment" {
 }
 
 resource "aws_lb_listener" "nodex_http_listener" {
-  load_balancer_arn = aws_lb.nodex_tg.arn
+  load_balancer_arn = aws_lb.app_alb.arn
   port              = 9100
   protocol          = "HTTP"
 
