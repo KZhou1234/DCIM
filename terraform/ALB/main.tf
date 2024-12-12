@@ -18,6 +18,14 @@ resource "aws_security_group" "alb_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  ingress {
+    description = "Allow noedx HTTP traffic"
+    from_port   = 9100
+    to_port     = 9100
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   egress {
     description = "Allow all outbound traffic"
     from_port   = 0
@@ -120,5 +128,45 @@ resource "aws_lb_listener" "cAdvisor_http_listener" {
   default_action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.cAdvisor_tg.arn
+  }
+}
+
+
+resource "aws_lb_target_group" "nodex_tg" {
+  name     = "nodex-target-group"
+  port     = 9100
+  protocol = "HTTP"
+  vpc_id   = var.vpc_id
+
+  health_check {
+    protocol            = "HTTP"
+    path                = "/metrics"
+    interval            = 30
+    timeout             = 5
+    healthy_threshold   = 2 
+    unhealthy_threshold = 2
+    matcher             = "200,302"
+  }
+
+  tags = {
+    Name = "nodex Target Group"
+  }
+}
+
+resource "aws_lb_target_group_attachment" "nodex_tg_attachment" {
+  count            = var.app_count  
+  target_group_arn = aws_lb_target_group.nodex_tg.arn
+  target_id        = var.app_server_ids[count.index]  
+  port             = 9100 
+}
+
+resource "aws_lb_listener" "nodex_http_listener" {
+  load_balancer_arn = aws_lb.nodex_tg.arn
+  port              = 9100
+  protocol          = "HTTP"
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.nodex_tg.arn
   }
 }
